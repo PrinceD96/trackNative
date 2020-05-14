@@ -1,5 +1,9 @@
+require("./models/User");
 const server = require("express")();
 const mongoose = require("mongoose");
+const json = require("express").json();
+
+const authRouter = require("./routes/authRoutes");
 
 const mongoUri =
 	"mongodb+srv://admin:passwordXXX@cluster0-ipdnx.mongodb.net/test?retryWrites=true&w=majority";
@@ -14,6 +18,9 @@ mongoose.connection.on("connected", () => {
 mongoose.connection.on("error", error => {
 	console.error("Error connecting to Mongo instance", error);
 });
+
+server.use(json);
+server.use(authRouter);
 
 server.get("/", (req, res) => res.send("Server is up!"));
 
