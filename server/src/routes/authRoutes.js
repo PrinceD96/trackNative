@@ -1,14 +1,20 @@
-const router = require("express").Router();
-const mongoose = require("mongoose");
-const User = mongoose.model("User");
+const router = require('express').Router();
+const mongoose = require('mongoose');
+const jwt = require('jsonwebtoken');
+const User = mongoose.model('User');
 
-router.post("/signup", async (req, res) => {
+router.post('/signup', async (req, res) => {
 	const { email, password } = req.body;
 
-	const user = new User({ email, password });
-	await user.save();
+	try {
+		const user = new User({ email, password });
+		await user.save();
 
-	res.status(201).send("Post request successful");
+		const token = jwt.sign({ userId: user._id }, 'My_Secret_Key');
+		res.status(201).send({ message: 'Post request successful', token });
+	} catch (error) {
+		return res.status(422).send(error.message);
+	}
 });
 
 module.exports = router;
