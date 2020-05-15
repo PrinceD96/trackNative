@@ -1,9 +1,11 @@
 require('./models/User');
+require('./models/Track');
 const server = require('express')();
 const mongoose = require('mongoose');
 const json = require('express').json();
 
 const authRouter = require('./routes/authRoutes');
+const trackRouter = require('./routes/trackRoutes');
 const requireAuth = require('./middlewares/requiredAuth');
 
 const mongoUri =
@@ -22,6 +24,7 @@ mongoose.connection.on('error', error => {
 
 server.use(json);
 server.use(authRouter);
+server.use(trackRouter);
 
 server.get('/', requireAuth, (req, res) => {
 	res.send(`Your email: ${req.user.email}`);

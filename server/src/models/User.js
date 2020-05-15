@@ -13,14 +13,14 @@ const userSchema = new mongoose.Schema({
 	}
 });
 
-userSchema.pre('save', function () {
+userSchema.pre('save', function (next) {
 	const user = this;
 
 	if (!user.isModified('password')) {
 		return next();
 	}
 
-	bcrypt.genSalt(10, (error, salt) => {
+	bcrypt.genSalt(14, (error, salt) => {
 		if (error) {
 			return next(error);
 		}
